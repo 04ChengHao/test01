@@ -1,0 +1,5 @@
+com\ruanda\mapper\UserMapper.class
+com\ruanda\service\UserService.class
+com\ruanda\controller\UserController.class
+com\ruanda\pojo\User.class
+com\ruanda\service\impl\UserServiceImpl.class

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruanda.mapper.UserMapper">
+
+    <!--完成实体类与表中列名的映射
+        private String userId;
+        private String cardType;
+        private String cardNo;
+        private String userName;
+        private String userSex;
+        private String userAge;
+        private String userRole;
+    -->
+    <resultMap id="usermap" type="user">
+        <id property="userId" column="user_id"></id>
+        <result property="cardType" column="card_type"></result>
+        <result property="cardNo" column="card_no"></result>
+        <result property="userName" column="user_name"></result>
+        <result property="userSex" column="user_sex"></result>
+        <result property="userAge" column="user_age"></result>
+        <result property="userRole" column="user_role"></result>
+    </resultMap>
+    
+    <!--定义全部列名-->
+    <sql id="allColumns">
+        user_id,card_type,card_no,user_name,user_sex,user_age,user_role
+    </sql>
+
+    <!--分页查询用户-->
+    <select id="queryUserPage" resultMap="usermap" parameterType="java.lang.Integer">
+        select
+        <include refid="allColumns" />
+        from user
+        order by user_id desc
+        limit #{startRows},5
+    </select>
+
+    <!--
+        List<User> selectUserPage(
+            @Param("userName")
+            String userName,
+            @Param("userSex")
+            String userSex,
+            @Param("startRoe")  //算好的起始行的值
+            int startRow);
+    -->
+    <select id="selectUserPage" resultMap="usermap">
+        select <include refid="allColumns"></include>
+        from user
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                and user_sex = #{userSex}
+            </if>
+        </where>
+        limit #{startRow},5
+    </select>
+
+    <!--
+        int createUser(User user);
+    -->
+    <insert id="createUser" parameterType="user">
+        insert into user
+        values(#{userId},#{cardType},#{cardNo},#{userName},#{userSex},#{userAge},#{userRole})
+    </insert>
+
+    <!--
+        int deleteUserById(String userId);
+    -->
+    <delete id="deleteUserById" parameterType="string">
+        delete from user where user_id = #{userId}
+    </delete>
+
+    <!--
+        int getRowCount(
+            @Param("userName")
+            String userName,
+            @Param("userSex")
+            String userSex);
+    -->
+    <select id="getRowCount" resultType="int">
+        select count(*)
+        from user
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="userSex != null and userSex != ''">
+                and user_sex = #{userSex}
+            </if>
+        </where>
+    </select>
+
+    <!--根据 user_id 批量删除用户-->
+    <delete id="deleteUserByIdList" parameterType="java.util.List">
+        delete from user where user_id in <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">#{item,jdbcType=VARCHAR}</foreach>
+    </delete>
+
+    <!--根据 user_id 更新用户信息-->
+    <update id="updateUserById" parameterType="com.ruanda.pojo.User" >
+        update user
+        <set >
+            <if test="cardNo != null" >
+                card_no = #{cardNo},
+            </if>
+            <if test="cardType != null" >
+                card_type = #{cardType},
+            </if>
+            <if test="userName != null" >
+                user_name = #{userName},
+            </if>
+            <if test="userSex != null" >
+                user_sex = #{userSex},
+            </if>
+            <if test="userAge != null" >
+                user_age = #{userAge},
+            </if>
+            <if test="userRole != null" >
+                user_role = #{userRole}
+            </if>
+        </set>
+        where 1 = 1
+        and user_id = #{userId}
+    </update>
+</mapper>

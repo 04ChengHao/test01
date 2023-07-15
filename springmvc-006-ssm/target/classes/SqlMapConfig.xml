@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--设置日志输出语句，显示相应的操作的sql语句-->
+    <!--<settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>-->
+
+    <!--  开启驼峰命名自动映射，将数据库列名映射成Java属性名  -->
+    <!--<settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>-->
+
+    <!--  延迟加载的全局开关。当开启时，所有关联对象都会延迟加载。 特定关联关系中可通过设置 fetchType="eager" 属性来覆盖该项的开关状态  -->
+    <!--<settings>
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>-->
+</configuration>
